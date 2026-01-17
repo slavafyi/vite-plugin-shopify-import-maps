@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/vite-plugin-shopify-import-maps?color=brightgreen)](https://www.npmjs.com/package/vite-plugin-shopify-import-maps) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](https://standardjs.com) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/v/vite-plugin-shopify-import-maps?color=brightgreen)](https://www.npmjs.com/package/vite-plugin-shopify-import-maps) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # vite-plugin-shopify-import-maps
 

@@ -7,19 +7,19 @@ import MagicString from 'magic-string'
 /**
  * Use bare specifier in import module statements defined in bareModules option groups.
  */
-export default function bareModules (options: PluginOptions): Plugin {
+export default function bareModules(options: PluginOptions): Plugin {
   const moduleSpecifierMap = new Map<string, string>()
 
   return {
     name: 'vite-plugin-shopify-import-maps:bare-modules',
     api: {
-      get moduleSpecifierMap () {
+      get moduleSpecifierMap() {
         return moduleSpecifierMap
-      }
+      },
     },
-    renderChunk (_, chunk) {
+    renderChunk(_, chunk) {
       const bareModules = options.bareModules as BareModules
-      const groups = bareModules.groups
+      const { groups } = bareModules
       const moduleId = chunk.facadeModuleId ?? chunk.moduleIds.at(-1)
 
       let specifierKey: string | undefined
@@ -33,18 +33,17 @@ export default function bareModules (options: PluginOptions): Plugin {
           }
 
           if (Array.isArray(value)) {
-            const arrayTestPassed = value.some((element) => {
-              return (
-                (element instanceof RegExp && element.test(moduleId)) ||
-                  (typeof element === 'string' && moduleId.includes(element))
-              )
-            })
+            const arrayTestPassed = value.some(element => (
+              (element instanceof RegExp && element.test(moduleId))
+              || (typeof element === 'string' && moduleId.includes(element))
+            ))
 
             if (arrayTestPassed) {
               specifierKey = buildSpecifierKey(chunk.name, group)
               break
             }
-          } else {
+          }
+          else {
             const regexpTestPassed = value instanceof RegExp && value.test(moduleId)
             const stringTestPassed = typeof value === 'string' && moduleId.includes(value)
 
@@ -62,7 +61,7 @@ export default function bareModules (options: PluginOptions): Plugin {
 
       moduleSpecifierMap.set(chunk.fileName, specifierKey)
     },
-    generateBundle (options, bundle) {
+    generateBundle(options, bundle) {
       Object.keys(bundle).forEach((fileName) => {
         const chunk = bundle[fileName]
 
@@ -95,10 +94,10 @@ export default function bareModules (options: PluginOptions): Plugin {
           }
         }
       })
-    }
+    },
   }
 }
 
-function buildSpecifierKey (name: string, group: string): string {
-  return group + '/' + name
+function buildSpecifierKey(name: string, group: string): string {
+  return `${group}/${name}`
 }

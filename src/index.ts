@@ -14,12 +14,12 @@ const vitePluginShopifyImportMaps = (userOptions?: Partial<PluginOptions>): Plug
     snippetFile = 'importmap.liquid',
     themeRoot = './',
     modulePreload = false,
-    bareModules: bareModulesOption = false
+    bareModules: bareModulesOption = false,
   } = userOptions ?? {}
 
   const plugins = [
     preloadHelper(),
-    importMaps({ snippetFile, themeRoot, modulePreload, bareModules: bareModulesOption })
+    importMaps({ snippetFile, themeRoot, modulePreload, bareModules: bareModulesOption }),
   ]
 
   if (bareModulesOption !== false) {
@@ -27,7 +27,7 @@ const vitePluginShopifyImportMaps = (userOptions?: Partial<PluginOptions>): Plug
       snippetFile,
       themeRoot,
       modulePreload,
-      bareModules: { ...{ defaultGroup: 'main', groups: {} }, ...(bareModulesOption as BareModules) }
+      bareModules: { ...{ defaultGroup: 'main', groups: {} }, ...(bareModulesOption as BareModules) },
     }))
   }
 

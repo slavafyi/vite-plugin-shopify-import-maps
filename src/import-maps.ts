@@ -6,7 +6,7 @@ import fs from 'node:fs/promises'
 /**
  * Generates an import map file from a Vite bundle.
  */
-export default function importMaps (options: PluginOptions): Plugin {
+export default function importMaps(options: PluginOptions): Plugin {
   const outDir = path.resolve(options.themeRoot, 'snippets')
   const importMapFile = path.join(outDir, options.snippetFile)
 
@@ -16,12 +16,12 @@ export default function importMaps (options: PluginOptions): Plugin {
   return {
     name: 'vite-plugin-shopify-import-maps:import-maps',
     enforce: 'post',
-    configResolved (resolvedConfig) {
+    configResolved(resolvedConfig) {
       config = resolvedConfig
     },
-    async buildStart () {
+    async buildStart() {
       if (options.bareModules !== false) {
-        const bareModulesPlugin = config.plugins.find((plugin) => plugin.name.includes('bare-modules'))
+        const bareModulesPlugin = config.plugins.find(plugin => plugin.name.includes('bare-modules'))
         if (bareModulesPlugin !== undefined) {
           moduleSpecifierMap = bareModulesPlugin.api.moduleSpecifierMap
         }
@@ -30,11 +30,11 @@ export default function importMaps (options: PluginOptions): Plugin {
       if (config.command === 'serve') {
         await fs.writeFile(
           importMapFile,
-          ''
+          '',
         )
       }
     },
-    async writeBundle (_, bundle) {
+    async writeBundle(_, bundle) {
       const importMap = new Map<string, string>()
       const modulePreloadTags: string[] = []
 
@@ -62,20 +62,20 @@ export default function importMaps (options: PluginOptions): Plugin {
           if (options.modulePreload) {
             modulePreloadTags.push(`<link rel="modulepreload" href="{{ '${fileName}' | asset_url }}">`)
           }
-        })
+        }),
       )
 
       const json = JSON.stringify({ imports: Object.fromEntries(importMap) }, null, 2)
       const scriptTag = `<script type="importmap">\n${json}\n</script>`
-      const fileContents = options.modulePreload ? scriptTag + '\n\n' + modulePreloadTags.join('\n') : scriptTag
+      const fileContents = options.modulePreload ? `${scriptTag}\n\n${modulePreloadTags.join('\n')}` : scriptTag
 
       await fs.writeFile(
         importMapFile,
         fileContents,
-        { encoding: 'utf8' }
+        { encoding: 'utf8' },
       )
 
       console.info(`[import-maps]: Successfully wrote to ${importMapFile}`)
-    }
+    },
   }
 }

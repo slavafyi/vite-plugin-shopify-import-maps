@@ -7,7 +7,7 @@ const preloadHelperId = '\0vite/preload-helper'
  * Customizes the Vite preload helper to work with import-maps.
  * @see {@link https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/importAnalysisBuild.ts Source code}
  */
-export default function preloadHelper (): Plugin {
+export default function preloadHelper(): Plugin {
   const preloadCode = `
     const assetsURL = ${assetsURL.toString()}
     const seen = {}
@@ -18,27 +18,26 @@ export default function preloadHelper (): Plugin {
     name: 'vite-plugin-shopify-import-maps:preload-helper',
     apply: 'build',
     enforce: 'post',
-    resolveId (id) {
+    resolveId(id) {
       if (id === preloadHelperId) {
         return id
       }
     },
-    load (id) {
+    load(id) {
       if (id === preloadHelperId) {
         return preloadCode
       }
-    }
+    },
   }
 }
 
 const assetsURL = function (dep: string, importerUrl?: string): string {
-  // @ts-expect-error import.meta.resolve return a string
   return import.meta.resolve(dep, importerUrl)
 }
 
 declare const seen: Record<string, boolean>
 
-function preload (baseModule: () => Promise<unknown>, deps: string[], importerUrl?: string): Promise<unknown> | undefined {
+function preload(baseModule: () => Promise<unknown>, deps: string[], importerUrl?: string): Promise<unknown> | undefined {
   if (deps === undefined || deps.length === 0) {
     return baseModule()
   }
@@ -67,7 +66,8 @@ function preload (baseModule: () => Promise<unknown>, deps: string[], importerUr
             return dep
           }
         }
-      } else if (document.querySelector(`link[href="${dep}"]${cssSelector}`) !== null) {
+      }
+      else if (document.querySelector(`link[href="${dep}"]${cssSelector}`) !== null) {
         return dep
       }
 
@@ -86,16 +86,16 @@ function preload (baseModule: () => Promise<unknown>, deps: string[], importerUr
       if (isCss) {
         return await new Promise((resolve, reject) => {
           link.addEventListener('load', resolve)
-          link.addEventListener('error', () => { reject(new Error(`Unable to preload CSS for ${dep}`)) }
+          link.addEventListener('error', () => { reject(new Error(`Unable to preload CSS for ${dep}`)) },
           )
         })
       }
 
       return dep
-    })
+    }),
   )
     .then(async () => await baseModule())
-    .catch((err) => {
+    .catch((err: unknown) => {
       const e = new Event('vite:preloadError', { cancelable: true })
       // @ts-expect-error custom payload
       e.payload = err

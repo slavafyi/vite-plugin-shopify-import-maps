@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-shopify-import-maps",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "description": "Enhances Shopify theme development by adding support for import-maps",
   "license": "MIT",
   "repository": {

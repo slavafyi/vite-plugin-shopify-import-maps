@@ -5,13 +5,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/slavamak/vite-plugin-shopify-import-maps.git"
+    "url": "git+https://github.com/slavafyi/vite-plugin-shopify-import-maps.git"
   },
   "bugs": {
-    "url": "https://github.com/slavamak/vite-plugin-shopify-import-maps/issues"
+    "url": "https://github.com/slavafyi/vite-plugin-shopify-import-maps/issues"
   },
-  "homepage": "https://github.com/slavamak/vite-plugin-shopify-import-maps#readme",
-  "author": "Slava Maksimov <hello@slavamak.com>",
+  "homepage": "https://github.com/slavafyi/vite-plugin-shopify-import-maps#readme",
+  "author": "Slava M. <hi@slava.fyi>",
   "keywords": [
     "vite",
     "plugin",

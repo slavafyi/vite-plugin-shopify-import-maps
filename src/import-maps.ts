@@ -60,7 +60,7 @@ export default function importMaps(options: PluginOptions): Plugin {
           }
 
           if (options.modulePreload) {
-            modulePreloadTags.push(`<link rel="modulepreload" href="{{ '${fileName}' | asset_url }}">`)
+            modulePreloadTags.push(`<link rel="modulepreload" href="{{ '${fileName}' | asset_url }}" fetchpriority="low">`)
           }
         }),
       )

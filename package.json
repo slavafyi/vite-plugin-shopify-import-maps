@@ -48,7 +48,7 @@
   },
   "types": "./dist/index.d.ts",
   "peerDependencies": {
-    "vite": "^5.0.0 || ^6.0.0 || ^7.0.0"
+    "vite": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
   },
   "devDependencies": {
     "@stylistic/eslint-plugin": "^5.9.0",

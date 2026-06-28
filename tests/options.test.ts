@@ -39,6 +39,18 @@ async function buildWithThemeRoot(buildRoot: string, themeRoot: string, snippetF
   await buildFixture(buildRoot, vitePluginShopifyImportMaps({ themeRoot, ...(snippetFile === undefined ? {} : { snippetFile }) }))
 }
 
+function createDefaultPluginFromCwd(cwd: string): ReturnType<typeof vitePluginShopifyImportMaps> {
+  const previousCwd = process.cwd()
+  process.chdir(cwd)
+
+  try {
+    return vitePluginShopifyImportMaps()
+  }
+  finally {
+    process.chdir(previousCwd)
+  }
+}
+
 describe('option coverage', () => {
   let fixtureRoot = ''
 
@@ -51,15 +63,8 @@ describe('option coverage', () => {
   })
 
   test('defaults resolve themeRoot from cwd and keep current non-bare output', async () => {
-    const cwd = process.cwd()
-    process.chdir(fixtureRoot)
-
-    try {
-      await buildFixture(fixtureRoot, vitePluginShopifyImportMaps())
-    }
-    finally {
-      process.chdir(cwd)
-    }
+    const plugin = createDefaultPluginFromCwd(fixtureRoot)
+    await buildFixture(fixtureRoot, plugin)
 
     const importMap = await readText(fixtureRoot, 'snippets', 'importmap.liquid')
 
@@ -99,6 +104,18 @@ describe('option coverage', () => {
     const importMap = await readText(fixtureRoot, 'snippets', 'importmap.liquid')
 
     expect(importMap).toContain('"main/entry": "{{ \'entry.js\' | asset_url }}"')
+  })
+
+  test('bareModules object respects custom defaultGroup with omitted groups', async () => {
+    const bareModules = { defaultGroup: 'vendors' } as unknown as BareModules
+
+    await buildFixture(fixtureRoot, vitePluginShopifyImportMaps({ themeRoot: fixtureRoot, bareModules }))
+
+    const importMap = await readText(fixtureRoot, 'snippets', 'importmap.liquid')
+
+    expect(importMap).toContain('"vendors/entry": "{{ \'entry.js\' | asset_url }}"')
+    expect(importMap).toContain('"vendors/main": "{{ \'main.js\' | asset_url }}"')
+    expect(importMap).toContain('"vendors/feature": "{{ \'feature.js\' | asset_url }}"')
   })
 
   test('bareModules object respects custom defaultGroup and non-default groups', async () => {

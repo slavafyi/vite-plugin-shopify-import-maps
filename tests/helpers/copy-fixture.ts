@@ -30,3 +30,7 @@ export async function copyFixture(fixturePath: string): Promise<string> {
 export async function removeFixture(fixturePath: string): Promise<void> {
   await fs.rm(fixturePath, { recursive: true, force: true })
 }
+
+export async function readText(fixturePath: string, ...segments: string[]): Promise<string> {
+  return await fs.readFile(path.join(fixturePath, ...segments), 'utf8')
+}

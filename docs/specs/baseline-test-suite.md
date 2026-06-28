@@ -151,5 +151,5 @@ Resolved decisions:
 - Status: `docs/status.md`
 - Idea: `docs/ideas/issue-23-baseline-test-suite.md`
 - Issue: https://github.com/slavafyi/vite-plugin-shopify-import-maps/issues/23
-- Plan: none yet
+- Plan: `docs/plans/baseline-test-suite.md`
 - ADR: none

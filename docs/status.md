@@ -1,10 +1,10 @@
 # Project status
 
-Updated: 2026-06-28
+Updated: 2026-06-29
 
 ## Current focus
 
-- Plan the ready baseline test suite spec.
+- Build the first slice of the baseline test suite plan.
 
 ## Recent work
 
@@ -18,10 +18,11 @@ Updated: 2026-06-28
 - Added requested option coverage and external fixture source details to the spec.
 - Resolved nested `bareModules` undefined handling and marked the spec ready.
 - Renamed the spec to a durable slug without the issue prefix.
+- Created an active implementation plan for the baseline test suite.
 
 ## Next action
 
-- Use `forge-plan` for `docs/specs/baseline-test-suite.md`.
+- Use `forge-build` for slice 1, "Plain Vite integration harness", in `docs/plans/baseline-test-suite.md`.
 
 ## Open questions
 
@@ -29,9 +30,10 @@ Updated: 2026-06-28
 
 ## Validation
 
-- Not run: docs-only spec update.
+- Passed: `git diff --check` for docs-only plan update.
 
 ## Relevant artifacts
 
 - Idea: `docs/ideas/issue-23-baseline-test-suite.md`
 - Spec: `docs/specs/baseline-test-suite.md`
+- Plan: `docs/plans/baseline-test-suite.md`

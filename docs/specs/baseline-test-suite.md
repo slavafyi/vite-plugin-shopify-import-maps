@@ -59,26 +59,28 @@ The package peer dependency currently claims support for Vite 5, 6, 7, and 8. Lo
 - The baseline must include a small dynamic-import case that builds successfully today and documents current working output without asserting known broken behavior.
 - The option coverage must include a no-user-options case and focused override/defaulting cases for `bareModules`, `themeRoot`, `snippetFile`, and `modulePreload`.
 - The option coverage must avoid exhaustive combinations; each case should isolate one behavior unless combining options is necessary to produce useful build output.
-- Compatibility CI must run the baseline suite, including documented Shopify mode with `vite-plugin-shopify`, against Vite 5 and Vite 8 on Node 22.x.
+- Compatibility CI must run the baseline suite, including documented Shopify mode with `vite-plugin-shopify`, against Vite 5 and Vite 8 on Node 22.x. Vite 5 coverage is currently deferred by product decision because the security override for `vite@<=6.4.1` and `vitest@4` make an honest Vite 5 lane incompatible without a separate test stack.
 - Version-specific failures in documented Shopify mode must not be ignored or skipped silently; they should block completion until there is a compatibility solution or an explicit follow-up product decision.
 - Vite 6 and Vite 7 may be added later, but their absence must not make this first baseline incomplete.
 
 ## Acceptance criteria
 
-- [ ] `pnpm test` runs the baseline suite and exits successfully on a local checkout.
-- [ ] The documented Shopify fixture performs a real build and creates `snippets/importmap.liquid` in the copied fixture theme root.
-- [ ] The plain Vite fixture performs a real build without `vite-plugin-shopify` and creates `snippets/importmap.liquid` in the copied fixture theme root.
-- [ ] Generated import-map snippets include `<script type="importmap">` and expected `asset_url` Liquid values for emitted JavaScript chunks.
-- [ ] A `bareModules: false` case asserts the current non-bare import-map keys and fallback Liquid asset-url keys that the plugin emits today.
-- [ ] A `bareModules`-enabled case asserts the expected configured bare-module alias keys and verifies unwanted non-bare aliases are not present for that case.
-- [ ] A `modulePreload: true` case asserts generated `<link rel="modulepreload" ... fetchpriority="low">` lines for expected emitted chunks.
-- [ ] A small dynamic-import case passes today and asserts only current working output.
-- [ ] Focused option tests cover no user options, `bareModules`, `themeRoot`, `snippetFile`, and `modulePreload` default/override behavior without a full cross-product matrix.
-- [ ] The Shopify fixture is based on the `hydrogen-theme` frontend/entrypoints plus lib/islands pattern.
-- [ ] The plain Vite fixture is based on the `import-map-plugin-repro` entry/main/feature dynamic import pattern.
-- [ ] No test writes generated build output into committed fixture source directories.
+- [x] `pnpm test` runs the baseline suite and exits successfully on a local checkout.
+- [x] The documented Shopify fixture performs a real build and creates `snippets/importmap.liquid` in the copied fixture theme root.
+- [x] The plain Vite fixture performs a real build without `vite-plugin-shopify` and creates `snippets/importmap.liquid` in the copied fixture theme root.
+- [x] Generated import-map snippets include `<script type="importmap">` and expected `asset_url` Liquid values for emitted JavaScript chunks.
+- [x] A `bareModules: false` case asserts the current non-bare import-map keys and fallback Liquid asset-url keys that the plugin emits today.
+- [x] A `bareModules`-enabled case asserts the expected configured bare-module alias keys and verifies unwanted non-bare aliases are not present for that case.
+- [x] A `modulePreload: true` case asserts generated `<link rel="modulepreload" ... fetchpriority="low">` lines for expected emitted chunks.
+- [x] A small dynamic-import case passes today and asserts only current working output.
+- [x] Focused option tests cover no user options, `bareModules`, `themeRoot`, `snippetFile`, and `modulePreload` default/override behavior without a full cross-product matrix.
+- [x] The Shopify fixture is based on the `hydrogen-theme` frontend/entrypoints plus lib/islands pattern.
+- [x] The plain Vite fixture is based on the `import-map-plugin-repro` entry/main/feature dynamic import pattern.
+- [x] No test writes generated build output into committed fixture source directories.
 - [ ] Required CI runs the baseline suite, including documented Shopify mode, for Vite 5 and Vite 8 on Node 22.x.
+  - Deferred: CI currently covers Vite 8 only because Vite 5 conflicts with the security override and Vitest 4 test stack.
 - [ ] `pnpm lint`, `pnpm build`, and `pnpm test` all pass after the baseline suite is added.
+  - Blocked: `pnpm build` and `pnpm test` pass; `pnpm lint` still fails on pre-existing `src/*` lint errors.
 
 ## UX, API, or behavior details
 
@@ -119,7 +121,7 @@ Top-level omitted options should use the plugin defaults. Nested `bareModules` o
 
 - Existing ADRs: none found.
 - Project-local skills: none found.
-- Compatibility: Vite 5 through Vite 8 are the current peer dependency range; first-pass required CI covers Vite 5 and Vite 8.
+- Compatibility: Vite 5 through Vite 8 are the current peer dependency range; first-pass CI currently covers Vite 8 only, with Vite 5 deferred pending a separate compatible test stack or product decision.
 - Security/privacy: tests should not require network access, external Shopify stores, credentials, or a real Shopify theme.
 - Performance: keep fixture builds small enough for regular local and CI use.
 
@@ -127,7 +129,7 @@ Top-level omitted options should use the plugin defaults. Nested `bareModules` o
 
 - Small/unit tests: optional later; not required for this first baseline.
 - Component/integration/real dependency tests: required through Vitest-driven real Vite fixture builds.
-- Contract/schema compatibility tests: required through Vite 5 and Vite 8 CI coverage, including documented Shopify mode in both lanes.
+- Contract/schema compatibility tests: intended through Vite 5 and Vite 8 CI coverage, including documented Shopify mode in both lanes. Current implementation covers Vite 8 only; Vite 5 is deferred.
 - Property/fuzz tests: out of scope.
 - E2E/broad-stack tests: out of scope; no real Shopify store or theme deployment is required.
 - Specialized tests: visual, accessibility, LLM eval, performance, and security tests are out of scope.

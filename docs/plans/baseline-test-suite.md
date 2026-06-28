@@ -1,7 +1,7 @@
 # Plan: baseline test suite
 
 Created: 2026-06-29
-Status: active
+Status: active; Vite 5 CI and full lint validation deferred
 
 Spec: `docs/specs/baseline-test-suite.md`
 
@@ -13,7 +13,7 @@ Build the suite in risk-first vertical slices: first prove the programmatic Vite
 
 ### 1. Plain Vite integration harness
 
-Status: pending
+Status: completed (`a6a5130`)
 
 Outcome:
 - Add the minimal test runner setup and a plain Vite fixture that runs through a real `vite.build({ write: true })` path.
@@ -65,7 +65,7 @@ Stop conditions:
 
 ### 2. Documented Shopify fixture
 
-Status: pending
+Status: completed (`f69b008`)
 
 Outcome:
 - Add a minimized Shopify-mode fixture based on the `hydrogen-theme` frontend/entrypoints plus lib/islands pattern.
@@ -113,7 +113,7 @@ Stop conditions:
 
 ### 3. Focused option coverage
 
-Status: pending
+Status: completed (`7fc3bf3`, follow-up `91e28e2`)
 
 Outcome:
 - Expand tests with table-driven cases for option defaults and selected overrides.
@@ -161,12 +161,16 @@ Stop conditions:
 
 ### 4. Vite 5 and Vite 8 compatibility CI
 
-Status: pending
+Status: partially completed (`66015c4`); Vite 5 deferred
 
 Outcome:
 - Add required GitHub Actions coverage for the baseline suite on Node 22.x against Vite 5 and Vite 8.
 - Run the same baseline suite, including documented Shopify mode, in both Vite-major lanes.
 - Keep release workflow changes limited to what is necessary; update Node there only if it starts installing or validating the project with test/dev dependencies.
+
+Implementation note:
+- Added Vite 8-only GitHub Actions coverage on Node 22.x with an explicit installed Vite major assertion.
+- Vite 5 was deferred by user decision because the current security override for `vite@<=6.4.1` and `vitest@4` make an honest Vite 5 lane incompatible without a separate test stack.
 
 Acceptance criteria covered:
 - Required CI runs the baseline suite, including documented Shopify mode, for Vite 5 and Vite 8 on Node 22.x.
@@ -205,7 +209,7 @@ Stop conditions:
 
 ### 5. Final validation and continuation update
 
-Status: pending
+Status: in progress; final completion blocked by deferred Vite 5 CI and pre-existing source lint failures
 
 Outcome:
 - Run the complete local validation set and update continuation docs after implementation.

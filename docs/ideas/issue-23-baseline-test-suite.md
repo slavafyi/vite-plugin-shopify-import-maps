@@ -90,5 +90,5 @@ Add a small baseline test suite for issue #23 that documents current working out
 - Issue: https://github.com/slavafyi/vite-plugin-shopify-import-maps/issues/23
 - Status: `docs/status.md`
 - Reference package: https://github.com/barrel/shopify-vite/tree/main/packages/vite-plugin-shopify
-- Spec: none yet
+- Spec: `docs/specs/baseline-test-suite.md`
 - ADR: none yet

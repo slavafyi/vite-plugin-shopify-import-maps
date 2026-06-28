@@ -34,6 +34,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint --ext .ts .",
+    "test": "vitest run",
     "prepublish": "tsup",
     "release": "bumpp && pnpm publish"
   },
@@ -56,11 +57,13 @@
     "bumpp": "^11.0.1",
     "es-module-lexer": "^2.0.0",
     "eslint": "^10.2.1",
+    "eslint-config-flat-gitignore": "^2.3.0",
     "eslint-config-love": "^153.0.0",
     "magic-string": "^0.30.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vite": "^5.4.21"
+    "vite": "^5.4.21",
+    "vitest": "4.1.9"
   },
   "pnpm": {
     "overrides": {

@@ -1,9 +1,11 @@
 import stylistic from '@stylistic/eslint-plugin'
+import gitignore from 'eslint-config-flat-gitignore'
 import { defineConfig } from 'eslint/config'
 import love from 'eslint-config-love'
 import type { Linter } from 'eslint'
 
 export default defineConfig([
+  gitignore(),
   { ignores: ['dist/**'] },
   {
     ...(love as Linter.Config),

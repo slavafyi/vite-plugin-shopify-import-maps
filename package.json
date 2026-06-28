@@ -38,7 +38,7 @@
     "prepublish": "tsup",
     "release": "bumpp && pnpm publish"
   },
-  "packageManager": "pnpm@9.0.1",
+  "packageManager": "pnpm@11.9.0",
   "tsup": {
     "entry": [
       "./src/index.ts"

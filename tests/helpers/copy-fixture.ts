@@ -26,3 +26,7 @@ export async function copyFixture(fixturePath: string): Promise<string> {
   await fs.mkdir(path.join(tempRoot, 'snippets'), { recursive: true })
   return tempRoot
 }
+
+export async function removeFixture(fixturePath: string): Promise<void> {
+  await fs.rm(fixturePath, { recursive: true, force: true })
+}

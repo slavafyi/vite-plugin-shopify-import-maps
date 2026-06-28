@@ -63,6 +63,7 @@
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vite": "^5.4.21",
+    "vite-plugin-shopify": "^4.1.2",
     "vitest": "4.1.9"
   },
   "pnpm": {

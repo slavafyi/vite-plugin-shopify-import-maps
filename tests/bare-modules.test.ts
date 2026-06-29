@@ -33,7 +33,7 @@ function plainViteConfig(
   return {
     plugins,
     build: {
-      minify: options.minify,
+      minify: options.minify ?? false,
       rollupOptions: {
         input: 'src/entry.ts',
       },

@@ -24,6 +24,7 @@ Updated: 2026-06-29
 - Added focused option coverage for defaults, `bareModules`, `themeRoot`, `snippetFile`, and `modulePreload`.
 - Added Vite 8-only GitHub Actions coverage on Node 22.x with an explicit installed Vite major assertion.
 - Deferred Vite 5 CI because the current security override for `vite@<=6.4.1` and `vitest@4` make a real Vite 5 lane incompatible without a separate test stack.
+- Moved the real `vite-plugin-shopify` test dependency into the private `tests/fixtures/shopify-vite` workspace fixture and renamed the Shopify integration test to `tests/shopify-vite.test.ts`.
 
 ## Next action
 
@@ -42,6 +43,7 @@ Updated: 2026-06-29
 - Passed: targeted lint for test/config files with `pnpm exec eslint --ext .ts tests vitest.config.ts eslint.config.ts`.
 - Passed: local Vite 8 version assertion used by CI.
 - Passed: `git diff --check` after implementation slices.
+- Passed: `pnpm install --lockfile-only`, `pnpm test`, `pnpm build`, and `git diff --check` after isolating the `shopify-vite` fixture dependency.
 - Failed, known pre-existing: `pnpm lint` reports only `src/*` lint errors that predate the test-suite work.
 - Deferred: required Vite 5 CI coverage; current CI covers Vite 8 only.
 

@@ -8,6 +8,8 @@ async function copyDirectory(source: string, target: string): Promise<void> {
   const entries = await fs.readdir(source, { withFileTypes: true })
 
   await Promise.all(entries.map(async (entry) => {
+    if (entry.name === 'node_modules') return
+
     const from = path.join(source, entry.name)
     const to = path.join(target, entry.name)
 

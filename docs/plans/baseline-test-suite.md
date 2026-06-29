@@ -81,10 +81,10 @@ Acceptance criteria covered:
 Likely files or modules:
 - `package.json`
 - `pnpm-lock.yaml`
-- `tests/shopify-mode.test.ts` or shared integration test file
-- `tests/fixtures/shopify-documented/frontend/entrypoints/theme.js`
-- `tests/fixtures/shopify-documented/frontend/lib/*`
-- `tests/fixtures/shopify-documented/frontend/islands/*`
+- `tests/shopify-vite.test.ts` or shared integration test file
+- `tests/fixtures/shopify-vite/frontend/entrypoints/theme.js`
+- `tests/fixtures/shopify-vite/frontend/lib/*`
+- `tests/fixtures/shopify-vite/frontend/islands/*`
 - `tests/helpers/*`
 
 Test strategy:
@@ -252,7 +252,7 @@ Stop conditions:
 
 ## Plan-level risks
 
-- `vite-plugin-shopify` integration is the highest-risk local dependency because the repo currently has no Shopify fixture or test setup.
+- `vite-plugin-shopify` integration remains the highest-risk local dependency; keep it isolated in the private `tests/fixtures/shopify-vite` workspace fixture.
 - Vite 8 compatibility may require CI install mechanics that differ from the local lockfile's Vite 5 development dependency.
 - Fixture source should be minimized or attributed to avoid introducing untracked licensing obligations.
 - Assertion stability depends on deterministic output names and avoiding broad generated-code snapshots.

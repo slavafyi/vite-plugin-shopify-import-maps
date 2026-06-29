@@ -2,11 +2,11 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { build, type InlineConfig } from 'vite'
 import { afterEach, beforeEach, describe, expect, test } from 'vitest'
-import shopify from 'vite-plugin-shopify'
 import vitePluginShopifyImportMaps from '../src'
+import shopify from './fixtures/shopify-vite/shopify'
 import { copyFixture, removeFixture } from './helpers/copy-fixture'
 
-const fixturePath = path.resolve('tests/fixtures/shopify-documented')
+const fixturePath = path.resolve('tests/fixtures/shopify-vite')
 
 describe('documented shopify import maps', () => {
   let themeRoot = ''

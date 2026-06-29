@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/vite-plugin-shopify-import-maps?color=brightgreen)](https://www.npmjs.com/package/vite-plugin-shopify-import-maps) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/v/vite-plugin-shopify-import-maps?color=brightgreen)](https://www.npmjs.com/package/vite-plugin-shopify-import-maps) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Test](https://github.com/slavafyi/vite-plugin-shopify-import-maps/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/slavafyi/vite-plugin-shopify-import-maps/actions/workflows/test.yml)
 
 # vite-plugin-shopify-import-maps
 

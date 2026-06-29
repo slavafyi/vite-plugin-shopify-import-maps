@@ -1,0 +1,40 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Vite 8 / Node 22
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22.x
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Assert Vite 8
+        run: |
+          node -e "const version = require('vite/package.json').version; console.log('vite', version); if (!version.startsWith('8.')) process.exit(1)"
+
+      - name: Run tests
+        run: pnpm test
+
+      - name: Run build
+        run: pnpm build

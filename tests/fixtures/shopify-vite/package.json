@@ -1,8 +1,0 @@
-{
-  "name": "shopify-vite-fixture",
-  "private": true,
-  "type": "module",
-  "dependencies": {
-    "vite-plugin-shopify": "4.1.2"
-  }
-}

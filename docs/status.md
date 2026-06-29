@@ -24,7 +24,9 @@ Updated: 2026-06-29
 - Added focused option coverage for defaults, `bareModules`, `themeRoot`, `snippetFile`, and `modulePreload`.
 - Added Vite 8-only GitHub Actions coverage on Node 22.x with an explicit installed Vite major assertion.
 - Deferred Vite 5 CI because the current security override for `vite@<=6.4.1` and `vitest@4` make a real Vite 5 lane incompatible without a separate test stack.
-- Moved the real `vite-plugin-shopify` test dependency into the private `tests/fixtures/shopify-vite` workspace fixture and renamed the Shopify integration test to `tests/shopify-vite.test.ts`.
+- Refactored the test suite into focused `import-map`, `bare-modules`, and `shopify` integration files with a shared temp-fixture build helper.
+- Moved the real `vite-plugin-shopify` test dependency to the root dev dependencies and removed the Shopify fixture workspace package/re-export.
+- Simplified the Shopify integration test to use `vite-plugin-shopify` defaults for `frontend/entrypoints` and Rollup input while building from a temporary fixture copy.
 
 ## Next action
 
@@ -44,6 +46,7 @@ Updated: 2026-06-29
 - Passed: local Vite 8 version assertion used by CI.
 - Passed: `git diff --check` after implementation slices.
 - Passed: `pnpm install --lockfile-only`, `pnpm test`, `pnpm build`, and `git diff --check` after isolating the `shopify-vite` fixture dependency.
+- Passed: `pnpm test`, `pnpm build`, `pnpm exec eslint --ext .ts tests vitest.config.ts eslint.config.ts`, and `git diff --check` after refactoring the test helper/files and moving `vite-plugin-shopify` to root dev dependencies.
 - Failed, known pre-existing: `pnpm lint` reports only `src/*` lint errors that predate the test-suite work.
 - Deferred: required Vite 5 CI coverage; current CI covers Vite 8 only.
 

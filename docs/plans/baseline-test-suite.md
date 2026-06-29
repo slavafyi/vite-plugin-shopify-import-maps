@@ -252,7 +252,7 @@ Stop conditions:
 
 ## Plan-level risks
 
-- `vite-plugin-shopify` integration remains the highest-risk local dependency; keep it isolated in the private `tests/fixtures/shopify-vite` workspace fixture.
+- `vite-plugin-shopify` integration remains the highest-risk local dependency; keep it as an explicit root dev dependency and keep the Shopify fixture realistic by relying on the plugin's default `frontend/entrypoints` input discovery.
 - Vite 8 compatibility may require CI install mechanics that differ from the local lockfile's Vite 5 development dependency.
 - Fixture source should be minimized or attributed to avoid introducing untracked licensing obligations.
 - Assertion stability depends on deterministic output names and avoiding broad generated-code snapshots.

@@ -55,7 +55,7 @@
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/node": "^25.6.0",
     "bumpp": "^11.0.1",
-    "es-module-lexer": "^2.0.0",
+    "es-module-lexer": "^2.2.0",
     "eslint": "^10.2.1",
     "eslint-config-flat-gitignore": "^2.3.0",
     "eslint-config-love": "^153.0.0",

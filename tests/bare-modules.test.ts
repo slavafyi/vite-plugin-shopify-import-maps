@@ -1,6 +1,7 @@
 import type { InlineConfig } from 'vite'
 import { describe, expect, test } from 'vitest'
 import vitePluginShopifyImportMaps from '../src'
+import bareModulesPlugin from '../src/bare-modules'
 import type { BareModules } from '../src/types'
 import { buildFixture } from './helpers/build-fixture'
 
@@ -13,10 +14,26 @@ interface BareModulesCase {
   unexpectedAssets?: Array<{ file: string, contains: string[] }>
 }
 
-function plainViteConfig(plugins: ReturnType<typeof vitePluginShopifyImportMaps>): InlineConfig {
+interface TestChunk {
+  type: 'chunk'
+  fileName: string
+  name: string
+  code: string
+  moduleIds: string[]
+  map?: unknown
+}
+
+type RenderChunkHook = (code: string, chunk: TestChunk) => void
+type GenerateBundleHook = (options: { sourcemap: false }, bundle: Record<string, TestChunk>) => void
+
+function plainViteConfig(
+  plugins: ReturnType<typeof vitePluginShopifyImportMaps>,
+  options: { minify?: boolean } = {},
+): InlineConfig {
   return {
     plugins,
     build: {
+      minify: options.minify ?? false,
       rollupOptions: {
         input: 'src/entry.ts',
       },
@@ -107,4 +124,63 @@ describe('bare modules', () => {
       await fixture.cleanup()
     }
   })
+
+  test('rewrites no-substitution template-literal dynamic imports', () => {
+    const plugin = bareModulesPlugin({
+      bareModules: { defaultGroup: 'chunks', groups: {} },
+      modulePreload: false,
+      snippetFile: 'importmap.liquid',
+      themeRoot: '.',
+    })
+    const renderChunk = plugin.renderChunk as unknown as RenderChunkHook
+    const generateBundle = plugin.generateBundle as unknown as GenerateBundleHook
+    const bundle = {
+      'entry.js': createTestChunk('entry', 'export const load = () => import(`./feature.js`)'),
+      'feature.js': createTestChunk('feature', 'export const feature = true'),
+    }
+
+    for (const chunk of Object.values(bundle)) renderChunk(chunk.code, chunk)
+    generateBundle({ sourcemap: false }, bundle)
+
+    expect(bundle['entry.js'].code).toContain('import(`chunks/feature`)')
+    expect(bundle['entry.js'].code).not.toContain('./feature.js')
+  })
+
+  test('rewrites bare module imports in minified builds', async () => {
+    const fixture = await buildFixture('plain-vite', ({ themeRoot }) => plainViteConfig(
+      vitePluginShopifyImportMaps({
+        bareModules: { defaultGroup: 'chunks', groups: {} },
+        modulePreload: false,
+        themeRoot,
+      }),
+      { minify: true },
+    ))
+
+    try {
+      const importMap = await fixture.readSnippet()
+      const entry = await fixture.readAsset('entry.js')
+      const main = await fixture.readAsset('main.js')
+
+      expect(importMap).toContain('"chunks/entry"')
+      expect(importMap).toContain('"chunks/main"')
+      expect(importMap).toContain('"chunks/feature"')
+      expect(entry).toContain('import(`chunks/main`)')
+      expect(main).toContain('import(`chunks/feature`)')
+      expect(entry).not.toContain('./main.js')
+      expect(main).not.toContain('./feature.js')
+    }
+    finally {
+      await fixture.cleanup()
+    }
+  })
 })
+
+function createTestChunk(name: string, code: string): TestChunk {
+  return {
+    code,
+    fileName: `${name}.js`,
+    moduleIds: [`/fixture/src/${name}.ts`],
+    name,
+    type: 'chunk',
+  }
+}

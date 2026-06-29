@@ -4,9 +4,29 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - es-module-lexer@2.2.0
+  - lodash@4.17.24
+  - liquidjs@10.25.3 || 10.25.4 || 10.25.5 || 10.25.7 || 10.25.8 || 10.26.0
+  - brace-expansion@5.0.6
+  - esbuild@0.28.1
+  - form-data@4.0.6
+  - vite@8.0.16
+  - '@opentelemetry/core@2.8.0'
 
 overrides:
   esbuild@<=0.24.2: '>=0.25.0'
   brace-expansion@>=1.0.0 <=1.1.11: '>=1.1.12'
   flatted@<3.4.0: '>=3.4.0'
   vite@<=6.4.1: '>=6.4.2'
+  '@opentelemetry/core@<2.8.0': ^2.8.0
+  brace-expansion@>=5.0.0 <5.0.6: ^5.0.6
+  esbuild@>=0.27.3 <0.28.1: ^0.28.1
+  form-data@>=4.0.0 <4.0.6: ^4.0.6
+  liquidjs@<10.25.7: ^10.25.7
+  liquidjs@<10.26.0: ^10.26.0
+  liquidjs@<=10.25.2: ^10.25.3
+  liquidjs@<=10.25.3: ^10.25.4
+  liquidjs@<=10.25.4: ^10.25.5
+  liquidjs@<=10.25.7: ^10.25.8
+  lodash@<=4.17.23: ^4.17.24
+  lodash@>=4.0.0 <=4.17.23: ^4.17.24
+  vite@>=8.0.0 <=8.0.15: ^8.0.16

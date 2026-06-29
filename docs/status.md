@@ -27,11 +27,16 @@ Updated: 2026-06-29
 - Refactored the test suite into focused `import-map`, `bare-modules`, and `shopify` integration files with a shared temp-fixture build helper.
 - Moved the real `vite-plugin-shopify` test dependency to the root dev dependencies and removed the Shopify fixture workspace package/re-export.
 - Simplified the Shopify integration test to use `vite-plugin-shopify` defaults for `frontend/entrypoints` and Rollup input while building from a temporary fixture copy.
+- Made the local development Vite major explicit by setting the `vite` dev dependency to `^8.0.0` while keeping the published peer range at Vite 5-8.
+- Added `pnpm build` to the Vite 8 GitHub Actions gate.
+- Hardened fixture copying to exclude `node_modules` by path basename.
 
 ## Next action
 
-- Decide whether to add a separate Vite 5 compatibility test stack, or keep Vite 5 CI deferred while the security override and Vitest 4 remain in place.
+- Follow up on Vite 5 support: either add a separate compatibility test stack or narrow the stated support later; do not treat the full Vite 5-8 peer range as CI-verified until this is resolved.
 - Separately decide whether to fix pre-existing `src/*` lint failures so `pnpm lint` can become a passing final validation gate.
+- If future tests become concurrent, refactor the default-`themeRoot` coverage away from process-wide `process.chdir(...)` before enabling parallel execution.
+- Decide later whether the `bareModules` omitted-nested-property cases should remain runtime tolerance only or become a stricter/clearer public type contract.
 
 ## Open questions
 
@@ -47,6 +52,7 @@ Updated: 2026-06-29
 - Passed: `git diff --check` after implementation slices.
 - Passed: `pnpm install --lockfile-only`, `pnpm test`, `pnpm build`, and `git diff --check` after isolating the `shopify-vite` fixture dependency.
 - Passed: `pnpm test`, `pnpm build`, `pnpm exec eslint --ext .ts tests vitest.config.ts eslint.config.ts`, and `git diff --check` after refactoring the test helper/files and moving `vite-plugin-shopify` to root dev dependencies.
+- Passed: `pnpm install --frozen-lockfile`, local Vite 8 assertion, `pnpm test`, `pnpm build`, `pnpm exec eslint --ext .ts tests vitest.config.ts eslint.config.ts`, and `git diff --check` after PR-review cleanup.
 - Failed, known pre-existing: `pnpm lint` reports only `src/*` lint errors that predate the test-suite work.
 - Deferred: required Vite 5 CI coverage; current CI covers Vite 8 only.
 

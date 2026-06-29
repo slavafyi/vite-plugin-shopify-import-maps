@@ -24,7 +24,7 @@ export async function copyFixture(fixtureName: FixtureName): Promise<BuiltFixtur
 
   await fs.cp(sourceRoot, root, {
     recursive: true,
-    filter: source => !source.includes(`${path.sep}node_modules${path.sep}`),
+    filter: source => path.basename(source) !== 'node_modules',
   })
 
   await fs.mkdir(path.join(root, 'snippets'), { recursive: true })

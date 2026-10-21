@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { build, type InlineConfig } from 'vite'
 
-export type FixtureName = 'plain-vite' | 'shopify-vite'
+export type FixtureName = 'plain-vite' | 'shopify-vite' | 'preload-vite'
 
 export interface BuiltFixture {
   root: string
@@ -46,7 +46,16 @@ function withBuildDefaults(fixture: BuiltFixture, config: InlineConfig): InlineC
   // Fixture builds intentionally use Rollup options for Vite 5-8.
   // eslint-disable-next-line @typescript-eslint/no-deprecated -- Vite 5-8 compatibility
   const rollupOptions = config.build?.rollupOptions ?? {}
-  const { output: rollupOutput } = rollupOptions
+  const { input, output: rollupOutput } = rollupOptions
+  // Rollup (Vite 5-7) resolves input against cwd, while Rolldown uses root.
+  const resolveInput = (entry: string): string => path.resolve(fixture.root, entry)
+  const resolvedInput = typeof input === 'string'
+    ? resolveInput(input)
+    : Array.isArray(input)
+      ? input.map(resolveInput)
+      : input === undefined
+        ? undefined
+        : Object.fromEntries(Object.entries(input).map(([name, entry]) => [name, resolveInput(entry)]))
   const output = Array.isArray(rollupOutput)
     ? rollupOutput
     : {
@@ -70,6 +79,7 @@ function withBuildDefaults(fixture: BuiltFixture, config: InlineConfig): InlineC
       ...config.build,
       rollupOptions: {
         ...rollupOptions,
+        input: resolvedInput,
         output,
       },
     },
@@ -88,7 +98,12 @@ export async function buildFixture(
     if (previousCwd !== undefined) process.chdir(fixture.root)
 
     const config = await createConfig(fixture)
-    await build(withBuildDefaults(fixture, config))
+    // Keep Vitest on its supported Vite version while exercising older Vite
+    // builders through an npm alias in the compatibility CI jobs.
+    const vite: { build: typeof build } = process.env.VITE_TEST_PACKAGE === undefined
+      ? { build }
+      : await import(process.env.VITE_TEST_PACKAGE) as { build: typeof build }
+    await vite.build(withBuildDefaults(fixture, config))
 
     return fixture
   }

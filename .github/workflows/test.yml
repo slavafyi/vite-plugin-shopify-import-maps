@@ -10,7 +10,11 @@ on:
 
 jobs:
   test:
-    name: Vite 8 / Node 22
+    name: Vite ${{ matrix.vite }} / Node 22
+    strategy:
+      fail-fast: false
+      matrix:
+        vite: ['5.4.21', '6.4.2', '7.2.7', '8.0.0', '8.1.0', 'locked']
     runs-on: ubuntu-latest
 
     steps:
@@ -29,12 +33,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Assert Vite 8
+      - name: Select compatibility version
+        if: matrix.vite != 'locked'
+        run: pnpm add --save-dev --save-exact vite-compat@npm:vite@${{ matrix.vite }}
+
+      - name: Assert Vite version
+        env:
+          EXPECTED_VITE: ${{ matrix.vite }}
         run: |
-          node -e "const version = require('vite/package.json').version; console.log('vite', version); if (!version.startsWith('8.')) process.exit(1)"
+          node -e "const expected = process.env.EXPECTED_VITE; const version = require(expected === 'locked' ? 'vite/package.json' : 'vite-compat/package.json').version; console.log('vite', version); if (expected === 'locked' ? !version.startsWith('8.') : version !== expected) process.exit(1)"
 
       - name: Run tests
         run: pnpm test
+
+      - name: Run preload build compatibility tests
+        if: matrix.vite != 'locked'
+        env:
+          VITE_TEST_PACKAGE: vite-compat
+        run: pnpm exec vitest run tests/preload-build.test.ts
 
       - name: Run build
         run: pnpm build

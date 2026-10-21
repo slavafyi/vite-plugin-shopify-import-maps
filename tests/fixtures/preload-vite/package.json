@@ -1,0 +1,5 @@
+{
+  "name": "preload-build-fixture",
+  "private": true,
+  "type": "module"
+}

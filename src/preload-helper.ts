@@ -1,15 +1,16 @@
 import type { Plugin } from 'vite'
 
 const preloadMethod = '__vitePreload'
-const preloadHelperId = '\0vite/preload-helper'
+const preloadHelperId = '\0vite/preload-helper.js'
 
 /**
  * Customizes the Vite preload helper to work with import-maps.
  * @see {@link https://github.com/vitejs/vite/blob/main/packages/vite/src/node/plugins/importAnalysisBuild.ts Source code}
  */
 export default function preloadHelper(): Plugin {
+  // Emit import.meta literally instead of serializing a tool-transformed function.
   const preloadCode = `
-    const assetsURL = ${assetsURL.toString()}
+    const assetsURL = (dep, importerUrl) => import.meta.resolve(dep, importerUrl)
     const seen = {}
     export const ${preloadMethod} = ${preload.toString()}
   `
@@ -18,22 +19,18 @@ export default function preloadHelper(): Plugin {
     name: 'vite-plugin-shopify-import-maps:preload-helper',
     apply: 'build',
     enforce: 'post',
-    resolveId(id) {
+    // Let Vite resolve and load its virtual module, then replace its source.
+    // Unlike load hooks, transform hooks do not stop at the first result.
+    // The internal module ID is shared by Vite 5-8; build tests guard it.
+    transform(_, id) {
       if (id === preloadHelperId) {
-        return id
-      }
-    },
-    load(id) {
-      if (id === preloadHelperId) {
-        return preloadCode
+        return { code: preloadCode, map: { mappings: '' } }
       }
     },
   }
 }
 
-const assetsURL = function (dep: string, importerUrl?: string): string {
-  return import.meta.resolve(dep, importerUrl)
-}
+declare function assetsURL(dep: string, importerUrl?: string): string
 
 declare const seen: Record<string, boolean>
 

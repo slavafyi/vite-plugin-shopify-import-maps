@@ -38,7 +38,7 @@
     "prepublish": "tsup",
     "release": "bumpp && pnpm publish"
   },
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@12.21.0",
   "tsup": {
     "entry": [
       "./src/index.ts"
@@ -56,14 +56,14 @@
     "@types/node": "^25.9.5",
     "bumpp": "^11.1.0",
     "es-module-lexer": "^2.3.1",
-    "eslint": "^10.8.1",
+    "eslint": "^10.15.0",
     "eslint-config-flat-gitignore": "^2.3.0",
-    "eslint-config-love": "^153.0.0",
+    "eslint-config-love": "^158.0.0",
     "magic-string": "^0.30.21",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vite": "^8.2.1",
+    "vite": "^8.3.8",
     "vite-plugin-shopify": "4.1.2",
-    "vitest": "4.1.9"
+    "vitest": "4.1.12"
   }
 }

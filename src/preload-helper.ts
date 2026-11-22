@@ -48,11 +48,11 @@ function preload(baseModule: () => Promise<unknown>, deps: string[], importerUrl
     deps.map(async (dep) => {
       const depUrl = assetsURL(dep, importerUrl)
 
-      if (dep in seen) {
+      if (depUrl in seen) {
         return dep
       }
 
-      seen[dep] = true
+      seen[depUrl] = true
 
       const isCss = dep.endsWith('.css')
       const cssSelector = isCss ? '[rel="stylesheet"]' : ''
@@ -62,12 +62,12 @@ function preload(baseModule: () => Promise<unknown>, deps: string[], importerUrl
         for (let i = links.length - 1; i >= 0; i--) {
           const link = links[i]
 
-          if (link.href === dep && (!isCss || link.rel === 'stylesheet')) {
+          if (link.href === depUrl && (!isCss || link.rel === 'stylesheet')) {
             return dep
           }
         }
       }
-      else if (document.querySelector(`link[href="${dep}"]${cssSelector}`) !== null) {
+      else if (document.querySelector(`link[href="${depUrl}"]${cssSelector}`) !== null) {
         return dep
       }
 
